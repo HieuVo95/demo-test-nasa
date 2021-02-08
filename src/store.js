@@ -43,6 +43,13 @@ export default new Vuex.Store({
         },
         deleteremovedData(state, item) {
             state.removedData = state.removedData.filter(o => o.data[0].nasa_id !== item.data[0].nasa_id);
+        },
+        clearStorage(state) {
+            state.keyword = null;
+            state.totalAllData = 0;
+            state.allData = [];
+            state.likedData = [];
+            state.removedData = [];
         }
     },
     actions: {

@@ -2,8 +2,16 @@
     <div>
         <h2>Total: {{ total || 0 }}</h2>
         <div class="list-data">
-            <div class="row" v-if="items.length > 0">
-                <CardData v-for="(item, index) in items" :key="index" :item="item" @edit="edit" @undo="undo(index)" disabledLike />
+            <div class="d-flex flex-column" v-if="items.length > 0">
+                <div class="mb-3">
+                    <SortSelect @sortChange="sortChange" />
+                </div>
+                <div class="row">
+                    <CardData v-for="(item, index) in items" :key="index" :item="item" @edit="edit" @undo="undo(index)" disabledLike />
+                </div>
+            </div>
+            <div class="no-data" v-if="items.length === 0">
+                {{ `Sorry, no data here`}}
             </div>
         </div>
         <EditForm :item="item" v-if="isOpenEdit" @save="save" @hide="isOpenEdit = false" />
@@ -13,11 +21,13 @@
 <script>
 import CardData from "@/components/CardData"
 import EditForm from "@/components/EditForm"
+import SortSelect from "@/components/SortSelect"
 
 export default {
     components: {
         CardData,
-        EditForm
+        EditForm,
+        SortSelect
     },
     computed: {
         removedData() {
@@ -54,6 +64,46 @@ export default {
                     o.data[0].description = data.description;
                 }
             })
+        },
+        sortChange(sort) {
+            switch(sort) {
+                case 'Newest': {
+                    this.items.sort((a, b) => this.compareTime(b, a));
+                }
+                    break;
+                case 'Oldest': {
+                    this.items.sort((a, b) => this.compareTime(a, b));
+                }
+                    break;
+                case 'a- z': {
+                    this.items.sort((a, b) => this.compareAlpha(a, b));
+                }
+                    break;
+                case 'z - a': {
+                    this.items.sort((a, b) => this.compareAlpha(b, a));
+                }
+                    break;
+                default:
+                    break;
+            }
+        },
+        compareTime(a, b) {
+            if ( a.data[0].date_created < b.data[0].date_created ){
+                return -1;
+            }
+            if ( a.data[0].date_created > b.data[0].date_created ){
+                return 1;
+            }
+            return 0;
+        },
+        compareAlpha(a, b) {
+            if ( a.data[0].title < b.data[0].title ){
+                return -1;
+            }
+            if ( a.data[0].title > b.data[0].title ){
+                return 1;
+            }
+            return 0;
         }
     }
 }
@@ -65,6 +115,13 @@ export default {
     flex-direction: row;
     justify-content: space-around;
     flex-flow: wrap;
+}
+.no-data {
+    padding: 50px 0;
+    text-align: center;
+    font-size: 23px;
+    line-height: 23px;
+    color: #e74c3c;
 }
 
 @media screen and (max-width: 1000px) {
