@@ -1,11 +1,12 @@
 <template>
     <div class="card" :key="item.data[0].nasa_id">
         <div class="card-image">
-            <img :src="item.links[0].href || './assets/img/default-img.jpg'">
+            <img :src="item.links[0].href || './assets/img/default-img.jpg'" :alt="item.data[0].title">
+            <div class="date">{{ item.data[0].date_created | moment }}</div>
         </div>
         <div class="card-text">
             <div class="title">{{ item.data[0].title || 'Title' }}</div>
-            <p>{{ item.data[0].description.length > 100 ? item.data[0].description.substr(0, 97) + '...' : item.data[0].description }}</p>
+            <p>{{ item.data[0].description && item.data[0].description.length > 100 ? item.data[0].description.substr(0, 97) + '...' : item.data[0].description }}</p>
         </div>
         <div class="card-stats">
             <div class="stat left" :class="disabledLike && 'disabled'" @click="like">
@@ -27,6 +28,7 @@
 </template>
 
 <script>
+import moment from "moment"
 export default {
     props: {
         item: {
@@ -87,6 +89,11 @@ export default {
         edit() {
             this.$emit("edit", this.item);
         }
+    },
+    filters: {
+        moment(date) {
+            return moment(date).format('DD/MM/YYYY');
+        }
     }
 }
 </script>
@@ -104,12 +111,23 @@ export default {
     margin-bottom: 15px;
     .card-image {
         grid-area: image;
+        position: relative;
         img {
             border-top-left-radius: 15px;
             border-top-right-radius: 15px;
             width: 100%;
             object-fit: cover;
             height: 210px;
+        }
+        .date {
+            position: absolute;
+            top: 0%;
+            right: 0%;
+            padding: 10px 20px;
+            height: 45px;
+            background: #fff;
+            color: #717171;
+            border-radius: 0px 15px 0px 5px;
         }
     }
     .card-text {

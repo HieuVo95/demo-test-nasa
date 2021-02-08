@@ -6,7 +6,7 @@
         role="dialog"
     >
         <div
-            class="modal-dialog modal-dialog-centered"
+            class="modal-dialog modal-dialog-centered modal-lg"
             role="document"
         >
             <div class="modal-content">
@@ -30,8 +30,9 @@
                         name="titleData"
                         rules="required"
                         slim>
-                        <div class="input-form mt-3">
-                            <input type="text" placeholder="Input Title here.." v-model="titleData" :class="v.classes" maxlength="30" />
+                        <label class="mt-3" for="titleData">Title</label>
+                        <div class="input-form">
+                            <input id="titleData" type="text" placeholder="Input Title here.." v-model="titleData" :class="v.classes" maxlength="30" />
                         </div>
                     <div v-show="v.failedRules.required" class="text-error">This title cannot be empty.</div>
                     </ValidationProvider>
@@ -41,11 +42,15 @@
                         name="description"
                         rules="required"
                         slim>
-                        <div class="input-form mt-3">
-                            <textarea rows="4" placeholder="Input description here.." v-model="description" :class="v.classes" />
+                        <label class="mt-3" for="description">Description</label>
+                        <div class="input-form">
+                            <textarea id="description" rows="4" placeholder="Input description here.." v-model="description" :class="v.classes" />
                         </div>
                     <div v-show="v.failedRules.required" class="text-error">This description cannot be empty.</div>
                     </ValidationProvider>
+                    <div class="box-image">
+                        <img v-if="item.links[0]" :src="item.links[0].href" class="img-fluid" :alt="item.data[0].title">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn-submit" @click="saveData">Save</button>
@@ -166,6 +171,10 @@ export default {
                     border: 2px solid #ff4b2b;
                 }
             }
+        }
+        .box-image {
+            text-align: center;
+            margin: 15px auto;
         }
     }
     .modal-footer {

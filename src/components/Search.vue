@@ -2,8 +2,8 @@
     <div>
         <div class="search-wrap">
             <div class="search-box">
-                <input type="text" class="input" v-model="keyword" placeholder="Search..." />
-                <div class="btn btn-search" @click="search">
+                <input type="text" class="input" v-model="keyword" placeholder="Search for ... (e.g. 'Orion')" @keydown.enter="search()" />
+                <div class="btn btn-search" :class="!keyword && 'disabled'" @click="search()">
                     <i class="fas fa-search"></i>
                 </div>
             </div>
@@ -31,7 +31,6 @@ export default {
             })
         } else if (this.keywordStore) {
             this.keyword = this.keywordStore;
-            // this.$router.replace(`/all-data?keyword=${this.keywordStore}`);
             this.$nextTick(() => {
                 this.search();
             })
@@ -41,9 +40,9 @@ export default {
     methods: {
         search() {
             if (this.keyword) {
-                if (this.keyword !== this.$route.query.keyword) {
+                if (this.keyword !== this.$route.query.keyword || !this.$route.query.keyword) {
                     let path = this.$route.path;
-                    this.$router.replace(path + `?keyword=${this.keyword}`);
+                    this.$router.replace(path + `?keyword=${this.keyword}&page=1` );
                 }
                 this.$emit("search", this.keyword);
             }
@@ -73,6 +72,9 @@ export default {
       border-radius: 3px;
       font-size: 18px;
       padding-right: 80px;
+      &:focus, &:hover {
+          border: 3px solid #7690da;
+      }
     }
     .btn {
       position: absolute;
@@ -97,6 +99,13 @@ export default {
       &:hover {
         background: #708bd2;
       }
+    }
+    .btn.disabled {
+        cursor: not-allowed;
+        background: #95a5a6;
+        &:hover {
+            background: #7f8c8d;
+        }
     }
   }
 }

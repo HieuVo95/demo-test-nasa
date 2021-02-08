@@ -42,7 +42,7 @@ export default {
       return this.$store.state.likedData;
     },
     removeData() {
-      return this.$store.state.removeData;
+      return this.$store.state.removedData;
     }
   }
 }
@@ -65,8 +65,20 @@ export default {
     transform: scale(1.05);
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
   }
+  .card-body {
+    .card-title {
+      text-align: center;
+    }
+    p.card-text {
+      text-align: center;
+      font-size: 5rem;
+      line-height: 5rem;
+      color: #ff4b2b;
+    }
+  }
 }
 .btn-go {
+  width: 100%;
   color: #fff;
   background: linear-gradient(to right, #ff416c, #ff4b2b);
 }
